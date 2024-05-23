@@ -5,6 +5,7 @@ import morgan from "morgan";
 
 //routes
 import authRoutes from '../routes/auth.routes.js';
+import inscriptionRoutes from '../routes/inscription.routes.js';
 
 
 
@@ -55,6 +56,7 @@ class Server{
             const __dirname = path.resolve(new URL(import.meta.url).pathname.replace(/^\/(\w:)/, '$1'));
             
             this.app.use('/api/auth', authRoutes);
+            this.app.use('/api/inscription', inscriptionRoutes);
            
         
 

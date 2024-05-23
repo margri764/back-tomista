@@ -7,6 +7,7 @@ import  { insertLoginAttempt }  from "../helpers/insertLoginAttempt.js";
 import  { checkLoginLock }  from "../helpers/checkLoginLock.js";
 import { checkUserStates } from "../helpers/checkUserStates.js";
 import { sendAdminEmail } from "../config/adminEmailContactUs.js";
+import { generateToken } from "../helpers/tokenManager.js";
 
 
 const login = async (req, res = response) => {
@@ -75,9 +76,12 @@ const login = async (req, res = response) => {
 
       //si llega hasta aca es xq tiene todo en orden y deberia enviarle un codigo para la doble autenticacion
 
+      const token = await generateToken(email);
+
       return res.status(200).json({
         success: true,
-        user
+        user,
+        token
       });
 
 
@@ -354,17 +358,11 @@ const adminContactUs = async (req, res=response) => {
 }
 
 
-
- 
-
-
-
   export { 
             login,
             signUp,
             validateEmail,
             resendPassword,
             adminContactUs
-           
   }
 

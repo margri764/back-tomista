@@ -4,10 +4,13 @@ const router =  Router();
 // import  { query} from 'express-validator';
 // import { adminRole } from '../middlewares/check-role.js';
 import { validateEmail, login, resendPassword, signUp, adminContactUs } from '../controllers/auth.controllers.js';
+import { requireToken } from '../middlewares/requireToken.js';
 
 
 router.post('/login',[
 ], login);  
+
+router.post('/checkJsonWebToken', requireToken);
 
 router.post('/signUp',[
 ], signUp);  

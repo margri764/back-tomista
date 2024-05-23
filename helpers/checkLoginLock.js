@@ -8,7 +8,7 @@ export const checkLoginLock = async (email) => {
     const deleteEntriesQuery = 'DELETE FROM loginattempt WHERE email = ?;';
 
   
-    try {W
+    try {
         
       const [rows] = await pool.execute(lockCheckQuery, [email]);
   

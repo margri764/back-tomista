@@ -35,7 +35,7 @@ const verifyEmail= async ( email, code) =>{
 
         <span style="display: block; margin-top: 20px; font-size: 16px; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;"> Entre em nosso site usando o seguinte link. </span>
 
-        <a href="http://localhost:4200/autenticacao/verificar-email/erer${code}" style="font-size: 16px; font-family: Google Sans, Roboto, RobotoDraft, Helvetica, Arial, sans-serif; margin-top: 40px;"> Verifique</a>
+        <a href="http://localhost:4200/autenticacao/verificar-email/${email}${code}" style="font-size: 16px; font-family: Google Sans, Roboto, RobotoDraft, Helvetica, Arial, sans-serif; margin-top: 40px;"> Verifique</a>
         
         
         </div>
