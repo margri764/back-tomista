@@ -21,30 +21,35 @@ const login = async (req, res = response) => {
 
     try {
 
-      const [rows] = await pool.execute('SELECT * FROM user WHERE email = ?', [email]);
+      const [rows] = await pool.execute('SELECT * FROM account WHERE email = ?', [email]);
       
       user = rows[0];
 
+      // si ya esta verificado me cambio a "user"
 
-       if (!user) {
+      const [accountVerified] = await pool.execute('SELECT * FROM user WHERE email = ?', [email]);
+
+      if(accountVerified.length > 0){
+        user = accountVerified[0];
+      }
+      console.log('pass', password);
+
+      console.log('user: ', user);
+
+
+       if (!user || user.password !== password) {
         await insertLoginAttempt(email);
         return res.status(401).json({
           success: false,
           message: 'Credenciais incorretas',
         });
-      }else if(user.validateEmail === "UNVERIFIED"){
-        return res.status(400).json({
-          success: false,
-          message: 'Usuário não verificado',
-        });
       }
-
 
       const lockTime = new Date(Date.now() - LOCK_TIME);
 
       const sqlAttemptsQuery = 'SELECT * FROM loginattempt WHERE email = ? AND timestamp >= ?;';
       const [loginRows] = await pool.execute(sqlAttemptsQuery, [email, lockTime]);
-      const remainingAttempts = MAX_LOGIN_ATTEMPTS - loginRows.length;
+      // const remainingAttempts = MAX_LOGIN_ATTEMPTS - loginRows.length;
 
   
       if (loginRows.length >= MAX_LOGIN_ATTEMPTS) {
@@ -61,22 +66,25 @@ const login = async (req, res = response) => {
   
       }
 
-      
-      if (user.password !== password) {
-        await insertLoginAttempt(email);
-        return res.status(401).json({
-          success: false,
-          message: 'Credenciais incorretas',
-          remainingAttempts,
-        })
-      }
-
       const deleteAttemptsQuery = 'DELETE FROM loginattempt WHERE email = ?;';
       await pool.execute(deleteAttemptsQuery, [email]);
 
-      //si llega hasta aca es xq tiene todo en orden y deberia enviarle un codigo para la doble autenticacion
+
+
+      //si llega hasta aca es xq tiene todo en orden y deberia verificar su cuenta
+
+      if(user.validateEmail === 'UNVERIFIED'){
+
+      const updatedUser = { validateEmail : 'VERIFIED'}
+ 
+      await pool.query('UPDATE account set ? WHERE email = ?', [updatedUser, email]);
+
+    }
 
       const token = await generateToken(email);
+
+      let userWithoutpassword = {...user, password};
+      user = userWithoutpassword;
 
       return res.status(200).json({
         success: true,
@@ -84,9 +92,6 @@ const login = async (req, res = response) => {
         token
       });
 
-
-
-   
     
     } catch (error) {
       console.log('Error desde Login:', error);
@@ -115,7 +120,7 @@ const signUp = async (req, res) => {
   const { email } = req.body;
 
   if (email !== '' && email !== null) {
-    const [result] = await pool.query('SELECT * FROM user WHERE email = ?', [email]);
+    const [result] = await pool.query('SELECT * FROM account WHERE email = ?', [email]);
 
     if (result.length > 0) {
       return res.status(400).json({
@@ -125,7 +130,7 @@ const signUp = async (req, res) => {
     }
   }
 
-  // genera codigo 12
+  // genera codigo 6
   const generateCode = await generateRandomCode();
 
 
@@ -137,7 +142,7 @@ const signUp = async (req, res) => {
 // envia email y codigo de 50 digitos para q podamos verificar su cuenta
   await verifyEmail(email, generateCode);
 
-  await pool.query('INSERT INTO user SET ?', [userToInsert]);
+  await pool.query('INSERT INTO account SET ?', [userToInsert]);
 
 
   return res.status(200).json({
@@ -166,7 +171,7 @@ const validateEmail = async (req, res) => {
      
      const { email, code } = req.body;
 
-     const [rows] = await pool.execute('SELECT * FROM user WHERE email = ?', [email]);
+     const [rows] = await pool.execute('SELECT * FROM account WHERE email = ?', [email]);
      const userToConfirm = rows[0];
 
     const check = await checkUserStates(email);
@@ -193,7 +198,7 @@ const validateEmail = async (req, res) => {
       
     userToConfirm.validateEmail = 'VERIFIED';
 
-         // Actualizar el usuario
+    // Actualizar el usuario
     const [result] = await pool.query('UPDATE user set ? WHERE email = ?', [userToConfirm, email]);
 
     if (result.affectedRows === 0) {
@@ -203,11 +208,28 @@ const validateEmail = async (req, res) => {
       });
     }
 
+    const newProfile = {
+      email : userToConfirm.email,
+      password: userToConfirm.code
+      
+    }
+
+    // crea el perfil con los datos minimos
+    const [user] = await pool.query('INSERT into user set ? ', [newProfile]);
+
+    if (user.affectedRows === 0) {
+      return res.status(500).json({
+        success: false,
+        error: "Falha ao criar usuário.",
+      });
+    }
+
+
 
   return res.status(200).json({
       success: true,
       message: 'E-mail verificado com sucesso',
-      user: userToConfirm
+      user: user
     
   });
 

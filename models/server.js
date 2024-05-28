@@ -2,10 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import path from "path";
 import morgan from "morgan";
+import fileUpload from 'express-fileupload';
 
 //routes
 import authRoutes from '../routes/auth.routes.js';
-import inscriptionRoutes from '../routes/inscription.routes.js';
+import userRoutes from '../routes/user.routes.js';
+import paymentRoutes from '../routes/payment.routes.js';
 
 
 
@@ -13,7 +15,7 @@ class Server{
 
         constructor(){
             this.app = express();
-            // this.port = 8000;
+            // this.port = 4200;
             this.port = process.env.PORT;
             this.initialize();
 
@@ -39,14 +41,15 @@ class Server{
             // this.app.use(cors(corsOptions));
             this.app.use(cors());
             
-
+// Middleware para parsear los datos codificados en URL
+            this.app.use(express.urlencoded({ extended: true }));
             this.app.use (express.json());
             this.app.use(morgan('dev'));
-            // this.app.use(fileUpload({
-            //     useTempFiles : true,
-            //     tempFileDir : '/tmp/',
-            //     createParentPath: true
-            // }));
+            this.app.use(fileUpload({
+                useTempFiles : true,
+                tempFileDir : '/tmp/',
+                createParentPath: true
+            }));
             this.app.use(express.static('public'));
         
 
@@ -56,7 +59,8 @@ class Server{
             const __dirname = path.resolve(new URL(import.meta.url).pathname.replace(/^\/(\w:)/, '$1'));
             
             this.app.use('/api/auth', authRoutes);
-            this.app.use('/api/inscription', inscriptionRoutes);
+            this.app.use('/api/user', userRoutes);
+            this.app.use('/api/payment', paymentRoutes);
            
         
 

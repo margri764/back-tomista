@@ -4,7 +4,7 @@ import  { pool }  from "../db/config.db.js";
 export const checkUserStates = async ( email ) => {
     try {
 
-    const [rows] = await pool.execute('SELECT * FROM user WHERE Email = ?', [email]);
+    const [rows] = await pool.execute('SELECT * FROM account WHERE Email = ?', [email]);
     const user = rows[0];
 
     if(!user){

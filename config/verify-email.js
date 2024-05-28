@@ -21,24 +21,21 @@ let transporter = nodemailer.createTransport({
 
 
 //  se le envia un link para q se verifique su email
-const verifyEmail= async ( email, code) =>{
+const verifyEmail= async ( email, password) =>{
 
     const contentHtml = `
 
     <div style="padding:30px"> 
-        
-      
- 
-        <h1 style="color: #0078d4; font-size: 24px; font-family: Arial, sans-serif; margin-top:30px"> Verificar e-mail</h1>
-      
-        <span style="display: block; margin-top: 20px; font-size: 16px; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;"> Precisamos verificar a sua conta </span>
+   
+        <h1 style="color: #0078d4; font-size: 18px; font-family: Arial, sans-serif;"> Ativar conta, nova senha </h1>
+  
+        <span style="font-size: 14px; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif; margin-top:30px; display: block "> Email: ${email}  </span>
 
-        <span style="display: block; margin-top: 20px; font-size: 16px; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;"> Entre em nosso site usando o seguinte link. </span>
+        <span style="display: block; margin-top: 20px; font-size: 14px; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;"> Enviamos a sua nova senha para acesso. </span>
 
-        <a href="http://localhost:4200/autenticacao/verificar-email/${email}${code}" style="font-size: 16px; font-family: Google Sans, Roboto, RobotoDraft, Helvetica, Arial, sans-serif; margin-top: 40px;"> Verifique</a>
-        
-        
-        </div>
+        <span style="font-size: 24px; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif; margin-top:30px; display: block "> <b> ${password} </b> </span>
+  
+   </div>
         `;
         
 
