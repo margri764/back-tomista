@@ -25,15 +25,17 @@ const verifyEmail= async ( email, password) =>{
 
     const contentHtml = `
 
-    <div style="padding:30px"> 
+    <div style="padding:5px"> 
    
-        <h1 style="color: #0078d4; font-size: 18px; font-family: Arial, sans-serif;"> Ativar conta, nova senha </h1>
+        <h1 style="color: #0078d4; font-size: 1em; font-family: Arial, sans-serif;"> Ativar conta, nova senha </h1>
   
-        <span style="font-size: 14px; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif; margin-top:30px; display: block "> Email: ${email}  </span>
+        <span style="font-size: 1em; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif; margin-top:30px; display: block "> Email: ${email}  </span>
 
-        <span style="display: block; margin-top: 20px; font-size: 14px; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;"> Enviamos a sua nova senha para acesso. </span>
+        <span style="display: block; margin-top: 20px; font-size: 1em; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;"> Enviamos a sua  senha para acesso. </span>
 
-        <span style="font-size: 24px; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif; margin-top:30px; display: block "> <b> ${password} </b> </span>
+        <span style="font-size: 2em; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif; margin-top:30px; display: block "> <b> ${password} </b> </span>
+
+        <span style="font-size: 1em; font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif; margin-top:30px; display: block "> Digite sua nova senha no link a seguir: <a href='https://congressovirgofloscarmeli.org/autenticacao/login'> congressovirgofloscarmeli.org </span>
   
    </div>
         `;

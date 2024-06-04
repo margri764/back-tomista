@@ -8,6 +8,7 @@ import fileUpload from 'express-fileupload';
 import authRoutes from '../routes/auth.routes.js';
 import userRoutes from '../routes/user.routes.js';
 import paymentRoutes from '../routes/payment.routes.js';
+import notificationRoutes from '../routes/notification.routes.js';
 
 
 
@@ -61,6 +62,7 @@ class Server{
             this.app.use('/api/auth', authRoutes);
             this.app.use('/api/user', userRoutes);
             this.app.use('/api/payment', paymentRoutes);
+            this.app.use('/api/notification', notificationRoutes);
            
         
 

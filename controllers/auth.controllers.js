@@ -29,13 +29,18 @@ const login = async (req, res = response) => {
 
       const [accountVerified] = await pool.execute('SELECT * FROM user WHERE email = ?', [email]);
 
+      console.log('accountVerified:', accountVerified);
       if(accountVerified.length > 0){
         user = accountVerified[0];
+
+        if(user.status !== 'active' || user.state !== 1){
+          return res.status(400).json({
+            success: false,
+            message: "Sua conta não está ativa."
+          })
+        }
+
       }
-      console.log('pass', password);
-
-      console.log('user: ', user);
-
 
        if (!user || user.password !== password) {
         await insertLoginAttempt(email);
@@ -103,10 +108,6 @@ const login = async (req, res = response) => {
           errorMessage = 'Ocorreu um erro fora do nosso sistema, por favor, tente novamente mais tarde';
         }
 
-  
-
-
-   
       res.status(500).json({
         success: false,
         error: errorMessage,
@@ -386,5 +387,5 @@ const adminContactUs = async (req, res=response) => {
             validateEmail,
             resendPassword,
             adminContactUs
-  }
+          }
 

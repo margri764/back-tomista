@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProfile, getUserByEmail } from '../controllers/user.controllers.js';
+import { activePauseUser, changeRole, createProfile, deleteUserById, getAllUsers, getUserByEmail } from '../controllers/user.controllers.js';
 const router =  Router();
 
 
@@ -9,6 +9,20 @@ router.post('/createProfile',[
 
 router.get('/getUserByEmail',[
 ], getUserByEmail);  
+
+router.get('/getAllUsers',[
+], getAllUsers);  
+
+
+router.patch('/deleteUserById/:id',[
+], deleteUserById);  
+
+router.patch('/activePauseUser/:id',[
+], activePauseUser);  
+
+
+router.patch('/changeRole/:id',[
+], changeRole);  
 
 
 

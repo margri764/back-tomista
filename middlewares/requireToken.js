@@ -30,9 +30,13 @@ export const requireToken = async (req, res, next) => {
   
       req.userAuth = userAuth;
 
+      const { password, iduser, address, phone, profession, state, status, timestamp, ...rest } = userAuth;
+
+      const userWithout = rest;
+
       return res.status(200).json({
         message: 'Token válido.',
-        user: userAuth
+        user: userWithout
       });
 
     } catch (error) {
