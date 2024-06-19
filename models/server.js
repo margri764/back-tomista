@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from "path";
 import morgan from "morgan";
 import fileUpload from 'express-fileupload';
+import { PORT }from '../config.js';
 
 //routes
 import authRoutes from '../routes/auth.routes.js';
@@ -16,8 +17,10 @@ class Server{
 
         constructor(){
             this.app = express();
+
             // this.port = 4200;
-            this.port = process.env.PORT;
+            // this.port = process.env.PORT;
+            this.port = PORT;
             this.initialize();
 
         }

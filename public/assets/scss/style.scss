@@ -1,6 +1,16 @@
 @use "@angular/material" as mat;
 @include mat.core();
 
+  // set fix height to input
+
+  .mat-mdc-form-field {
+    height: 43px;
+    .mat-mdc-form-field-flex {
+      height: 43px;
+      align-items: center;
+    }
+  }
+
 @import "variables";
 @import "layouts/transitions";
 @import "helpers/color";

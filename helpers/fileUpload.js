@@ -11,7 +11,8 @@ export const uploadFile = async (  file, folder )=>{
         
             const md5Hash = crypto.createHash('md5').update(fileBuffer).digest('hex');
         
-            const fileName = `${md5Hash}_${sanitizedFileName}`;
+            const fileName = `${sanitizedFileName}`;
+            // const fileName = `${md5Hash}_${sanitizedFileName}`;
             
             const currentDir = path.resolve(new URL(import.meta.url).pathname.replace(/^\/(\w:)/, '$1'));
         

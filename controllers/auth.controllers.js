@@ -29,11 +29,10 @@ const login = async (req, res = response) => {
 
       const [accountVerified] = await pool.execute('SELECT * FROM user WHERE email = ?', [email]);
 
-      console.log('accountVerified:', accountVerified);
       if(accountVerified.length > 0){
         user = accountVerified[0];
 
-        if(user.status !== 'active' || user.state !== 1){
+        if(user.status !== 'active' ){
           return res.status(400).json({
             success: false,
             message: "Sua conta não está ativa."
@@ -152,7 +151,6 @@ const signUp = async (req, res) => {
   });
 
   } catch (error) {
-
 
     console.log('signUp Error: ', error);
     let errorMessage = 'Algo deu errado, por favor, entre em contato com o administrador';

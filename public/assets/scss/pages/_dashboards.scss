@@ -18,6 +18,7 @@
   height: 36px;
   .mat-form-field-infix {
     padding: 6px 0 1px !important;
+    // height: 16px !important;
   }
   .mat-mdc-form-field-subscript-wrapper {
     display: none;
@@ -35,7 +36,7 @@
     border-color: $borderColor;
   }
   .mat-mdc-form-field-flex {
-    height: 36px;
+    height: 6px;
     align-items: center;
   }
 }

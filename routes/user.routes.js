@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { activePauseUser, changeRole, createProfile, deleteUserById, getAllUsers, getUserByEmail } from '../controllers/user.controllers.js';
+import { activePauseUser, changeRole, createProfile, deleteUserById, getAllUsers, getProgramByConferenceId, getUserByEmail, uploadProgram } from '../controllers/user.controllers.js';
 const router =  Router();
 
 
@@ -14,8 +14,9 @@ router.get('/getAllUsers',[
 ], getAllUsers);  
 
 
-router.patch('/deleteUserById/:id',[
+router.delete('/deleteUserById/:id',[
 ], deleteUserById);  
+
 
 router.patch('/activePauseUser/:id',[
 ], activePauseUser);  
@@ -23,6 +24,13 @@ router.patch('/activePauseUser/:id',[
 
 router.patch('/changeRole/:id',[
 ], changeRole);  
+
+router.post('/uploadProgram',[
+], uploadProgram);  
+
+router.get('/getProgramByConferenceId/:id',[
+], getProgramByConferenceId);  
+
 
 
 

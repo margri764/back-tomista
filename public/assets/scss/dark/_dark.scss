@@ -332,6 +332,8 @@ html.dark-theme {
     color: rgba(255, 255, 255, 0.6) !important;
     font-family: 'poppins-regular' !important;
 
+
+
   }
   .mat-action-row {
     border-top-color: rgba(255, 255, 255, 0.12);
@@ -362,6 +364,8 @@ html.dark-theme {
   .mat-step-header .mat-step-label.mat-step-label-active,
   .mat-expansion-panel-header-title {
     color: white;
+    height: 20px;
+
   }
 
   .mat-mdc-raised-button[disabled][disabled] {

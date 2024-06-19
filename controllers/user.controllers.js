@@ -8,7 +8,6 @@ const createProfile = async (req, res = response) => {
 
     const body = JSON.parse(req.body.body);
 
-
     const { email, filePath, ...rest } = body;
 
 
@@ -238,7 +237,6 @@ const getAllUsers = async (req, res = response) => {
   }
 };
 
-
 const deleteUserById = async (req, res = response) => {
 
   
@@ -256,12 +254,12 @@ const deleteUserById = async (req, res = response) => {
         })
     }else{
 
-      const [rows] = await pool.query('UPDATE user SET state = ? WHERE iduser = ?', ['0', id]);
+      await pool.query('DELETE FROM user WHERE iduser = ?', [id]);
+      await pool.query('DELETE FROM account WHERE email = ?', [existingUser[0].email]);
 
   
        return res.status(200).json({
          success: true,
-         
        });
    
     }
@@ -355,6 +353,91 @@ const changeRole = async (req, res = response) => {
   }
 };
 
+const uploadProgram = async (req, res = response) => {
+  
+  try {
+
+    const body = JSON.parse(req.body.body);
+
+    const { idconference } = body;
+
+    console.log('req.files: ', req.files);
+    let uploadedFile = null;
+
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send('No se ha seleccionado ningún archivo.');
+  }
+
+    
+     uploadedFile = await uploadFile(req.files.file, 'document' );
+     console.log('uploadedFile: ', uploadedFile);
+
+   let newDocument = {
+    idconference,
+    filePath: uploadedFile.filePath
+   }
+
+  await pool.query('INSERT INTO document set  ?',[newDocument])
+
+  return res.status(200).json({
+    success: true
+
+  })
+  
+  } catch (error) {
+    console.log('Error desde uploadProgram:', error);
+
+    let errorMessage = 'Algo deu errado, por favor, entre em contato com o administrador';
+
+    res.status(500).json({
+      success: false,
+      error: errorMessage,
+    });
+  }
+};
+
+const getProgramByConferenceId = async (req, res = response) => {
+  
+  try {
+    
+    const { id }  = req.params;
+
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({
+        success: false,
+        message: 'ID inválido ou não presente'
+      });
+    }
+
+    const [rows] = await pool.execute('SELECT * FROM document WHERE idconference = ?', [id]);
+
+    if(rows.length === 0){
+      return res.status(400).json({
+        success: false,
+        message: 'no document',
+      });
+    }else{
+      return res.status(200).json({
+        success: true,
+        document: rows[0],
+      
+      });
+
+    }
+ 
+  } catch (error) {
+    console.log('Error desde getProgramByConferenceId:', error);
+
+    let errorMessage = 'Algo deu errado, por favor, entre em contato com o administrador';
+
+    res.status(500).json({
+      success: false,
+      error: errorMessage,
+    });
+  }
+};
+
+
 
 export { 
         createProfile,
@@ -362,6 +445,8 @@ export {
         getAllUsers,
         changeRole,
         deleteUserById,
-        activePauseUser
+        activePauseUser,
+        uploadProgram,
+        getProgramByConferenceId
        }
 
